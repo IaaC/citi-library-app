@@ -9,6 +9,8 @@ const map = new mapboxgl.Map({
   // bearing: -45,
 });
 
+// Hide embedded layers from a style
+//-------------------------------------------
 map.on("load", () => {
   map.setLayoutProperty("bcn-buildings", "visibility", "none");
   map.setLayoutProperty("bcn-stone", "visibility", "none");
@@ -20,9 +22,8 @@ map.on("load", () => {
   map.setLayoutProperty("bcn-age", "visibility", "none");
 });
 
-// Add buildings polygon tileset from mapbox
+// Add buildings shapes from geojson file
 //-------------------------------------------
-
 map.on("load", () => {
   // Find the index of the first symbol layer in the map style.
   const layers = map.getStyle().layers;
@@ -53,6 +54,8 @@ map.on("load", () => {
       type: "fill-extrusion",
       source: "combined",
       // "source-layer": "combined",
+      // color based on a feature https://stackoverflow.com/questions/63713703/mapbox-gl-js-coloring-individual-features-in-large-geojson
+
       layout: {},
       paint: {
         "fill-extrusion-color": [
@@ -62,7 +65,7 @@ map.on("load", () => {
           "#525d70",
         ],
         "fill-extrusion-height": ["get", "height"],
-        "fill-extrusion-opacity": 0.7,
+        "fill-extrusion-opacity": 0.85,
       },
     },
     firstSymbolId
@@ -110,12 +113,6 @@ map.on("load", () => {
       );
     }
   });
-  // Adding pop-ups
-  var popup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: true,
-  });
-  popup.addClassName("region-popup");
 
   // Change the cursor to a pointer when the mouse is over the places layer.
   map.on("mouseenter", "b-id", () => {
@@ -150,32 +147,44 @@ map.on("load", () => {
     //-----
 
     var options = {
-      series: [m_concrete, m_brick, m_stone, m_glass, m_metal, m_wood],
+      id: "Mchart",
+      series: [
+        {
+          name: "Materials",
+          data: [m_concrete, m_brick, m_stone, m_glass, m_metal, m_wood],
+        },
+      ],
       chart: {
-        height: 350,
-        type: "radialBar",
+        height: 290,
+        type: "radar",
+        toolbar: {
+          show: false,
+        },
       },
       plotOptions: {
-        radialBar: {
-          dataLabels: {
-            name: {
-              fontSize: "22px",
-            },
-            value: {
-              fontSize: "16px",
-            },
-            total: {
-              show: true,
-              label: "Total",
-              formatter: function (w) {
-                // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                return 249;
-              },
+        radar: {
+          size: 90,
+          polygons: {
+            strokeColors: "#9aeba3",
+            fill: {
+              colors: ["#f8f8f8", "#fff"],
             },
           },
         },
       },
-      labels: ["Concrete", "Brick", "Stone", "Glass", "Metal", "Wood"],
+      colors: ["#13678a"],
+      markers: {
+        size: 3,
+        colors: ["#13678a"],
+        strokeColor: "#012030",
+        strokeWidth: 2,
+      },
+      fill: {
+        opacity: 0.7,
+      },
+      xaxis: {
+        categories: ["Concrete", "Brick", "Stone", "Glass", "Metal", "Wood"],
+      },
     };
 
     var chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -184,161 +193,104 @@ map.on("load", () => {
 
   hoveredStateId = null;
 });
-//
-//
-//
-//
 
-// Layers Visibility
+// Change the color of the buildings layer
+//https://docs.mapbox.com/mapbox-gl-js/example/color-switcher/
 //-------------------------------------------
-document.getElementById("l-age").addEventListener("change", () => {
-  const clickedLayer = "bcn-age";
-  const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-  if (visibility === "visible") {
-    map.setLayoutProperty(clickedLayer, "visibility", "none");
-  } else {
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-  }
+document.getElementById("l-none").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "case",
+    ["boolean", ["feature-state", "hover"], false],
+    "#96d96a",
+    "#525d70",
+  ]);
 });
 
-map.on("load", () => {
-  map.setLayoutProperty("bcn-stone", "visibility", "none");
-  map.setLayoutProperty("bcn-wood", "visibility", "none");
-  map.setLayoutProperty("bcn-metal", "visibility", "none");
-  map.setLayoutProperty("bcn-brick", "visibility", "none");
-  map.setLayoutProperty("bcn-concrete", "visibility", "none");
-  map.setLayoutProperty("bcn-glass", "visibility", "none");
-  map.setLayoutProperty("bcn-age", "visibility", "none");
+document.getElementById("l-age").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "bld_age"],
+    1900,
+    "#8fc6ce",
+    1970,
+    "#238f99",
+    2015,
+    "#186a71",
+  ]);
 });
 
-map.on("load", () => {
-  document.getElementById("l-age").addEventListener("change", () => {
-    const clickedLayer = "bcn-age";
-    const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-    if (visibility === "visible") {
-      map.setLayoutProperty(clickedLayer, "visibility", "none");
-    } else {
-      map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    }
-  });
-
-  document.getElementById("l-age").addEventListener("change", () => {
-    const clickedLayer = "bcn-age";
-    const visibility = map.getLayoutProperty(clickedLayer, "visibility");
-
-    if (visibility === "visible") {
-      map.setLayoutProperty(clickedLayer, "visibility", "none");
-    } else {
-      map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    }
-  });
-
-  document.getElementById("l-glass").addEventListener("change", () => {
-    const clickedLayer = "bcn-glass";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-  });
-
-  document.getElementById("l-stone").addEventListener("change", () => {
-    const clickedLayer = "bcn-stone";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
-
-  document.getElementById("l-wood").addEventListener("change", () => {
-    const clickedLayer = "bcn-wood";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
-
-  document.getElementById("l-metal").addEventListener("change", () => {
-    const clickedLayer = "bcn-metal";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
-
-  document.getElementById("l-brick").addEventListener("change", () => {
-    const clickedLayer = "bcn-brick";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
-
-  document.getElementById("l-concrete").addEventListener("change", () => {
-    const clickedLayer = "bcn-concrete";
-    map.setLayoutProperty(clickedLayer, "visibility", "visible");
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
-
-  document.getElementById("l-none").addEventListener("change", () => {
-    map.setLayoutProperty("bcn-stone", "visibility", "none");
-    map.setLayoutProperty("bcn-wood", "visibility", "none");
-    map.setLayoutProperty("bcn-metal", "visibility", "none");
-    map.setLayoutProperty("bcn-brick", "visibility", "none");
-    map.setLayoutProperty("bcn-concrete", "visibility", "none");
-    map.setLayoutProperty("bcn-glass", "visibility", "none");
-  });
+document.getElementById("l-concrete").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "concrete"],
+    0.05,
+    "#91c8f9",
+    0.75,
+    "#0c3c68",
+  ]);
 });
-// Add Geojson file
-/*
-map.on("load", () => {
-  // Find the index of the first symbol layer in the map style.
-  const layers = map.getStyle().layers;
-  // Find the index of the first symbol layer in the map style.
-  let firstSymbolId;
-  for (const layer of layers) {
-    if (layer.type === "symbol") {
-      firstSymbolId = layer.id;
-      break;
-    }
-  }
 
-  map.addSource("buildings", {
-    type: "geojson",
-    // Use a URL for the value for the `data` property.
-    data: "library/geodata/BCN_B_M_2.geojson",
-  });
-
-  map.addLayer(
-    {
-      id: "buildings-layer",
-      type: "fill",
-      source: "buildings",
-      layout: {},
-      paint: {
-        "fill-color": "#adadad",
-      },
-    },
-    firstSymbolId
-  );
+document.getElementById("l-brick").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "bricks"],
+    0.05,
+    "#d67de3",
+    0.75,
+    "#3a0342",
+  ]);
 });
-*/
 
+document.getElementById("l-stone").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "stone"],
+    0.05,
+    "#cdacac",
+    0.3,
+    "#3e1b1b",
+  ]);
+});
+
+document.getElementById("l-glass").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "glass"],
+    0.05,
+    "#ebb992",
+    0.4,
+    "#6d2100",
+  ]);
+});
+
+document.getElementById("l-metal").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "metal"],
+    0.01,
+    "#cadfa9",
+    0.15,
+    "#3d4600",
+  ]);
+});
+
+document.getElementById("l-wood").addEventListener("click", () => {
+  map.setPaintProperty("b-id", "fill-extrusion-color", [
+    "interpolate-hcl",
+    ["linear"],
+    ["get", "wood"],
+    0.03,
+    "#ffeb43",
+    0.25,
+    "#a15f00",
+  ]);
+});
 // Mapbox Controls
 //-------------------------------------------
 

@@ -5,6 +5,20 @@
   box-sizing: border-box;
 }
 
+:root {
+  --d-blue: #012030;
+  --l-blue: #13678a;
+  --d-green: #45c4b0;
+  --l-green: #9aeba3;
+  --l-yellow: #dafdba;
+}
+
+.test {
+  position: absolute;
+  left: 200px;
+  top: 50px;
+  width: 100px;
+}
 #map {
   height: 100%;
   width: 100%;
@@ -87,7 +101,7 @@
   height: 94%;
   width: 20%;
   margin: 30px;
-  padding: 40px 60px 40px 30px;
+  padding: 40px 40px 40px 40px;
   background-color: #ffffffc1;
   border-radius: 10px;
   border-color: #04aa6d;
@@ -104,7 +118,7 @@
 }
 
 .form-title {
-  color: #5f5f5f;
+  color: var(--d-blue);
   font-weight: normal;
   /* font-family: monospace; */
   font-size: 20px;
@@ -113,7 +127,7 @@
   padding-left: 10px !important;
   padding-right: 50px !important;
   width: 100%;
-  background-color: #96d96ae4;
+  background-color: var(--l-green);
   padding: 5px;
   border-radius: 5px;
 }
@@ -143,4 +157,48 @@
 
 #legend {
   height: 80px;
+}
+
+.btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.layer-btn {
+  background-color: var(--l-blue);
+  border: none;
+  height: 25px;
+  text-transform: uppercase;
+  font-family: inherit;
+  color: white;
+  font-size: 12px;
+  width: 100%;
+}
+
+.active {
+  opacity: 70%;
+}
+.active,
+.layer-btn:hover {
+  opacity: 70%;
+}
+
+.f-img {
+  width: 90%;
+  margin: auto;
+  opacity: 60%;
+  margin-top: 20px;
+}
+
+.f-chart {
+  background: none !important;
+  border: none !important;
+  max-width: 280px;
+  margin: 0px auto !important;
+  padding: 0px !important;
+}
+
+#type {
+  margin-top: 20px;
 }
