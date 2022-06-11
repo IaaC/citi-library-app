@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>CITY LIBRARY</title>
 
     <link
       rel="stylesheet"
@@ -29,8 +29,26 @@
       type="text/css"
     />
 
+    <script>
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        );
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        );
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        );
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <!-- CSS file -->
     <link rel="stylesheet" href="style.css" />
+    <link href="../../assets/styles.css" rel="stylesheet" />
   </head>
   <body>
     <!-- MAPBOX
@@ -42,25 +60,6 @@
     <div class="layer-list">
       <fieldset class="mb-3">
         <p class="form-title">Map Layers</p>
-
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="l-age" />
-          <label class="form-check-label" for="exampleRadio2"
-            >Buildings Age</label
-          >
-        </div>
-        <div class="mb-3 form-check">
-          <input
-            type="checkbox"
-            class="form-check-input"
-            id="l-views"
-            checked="check"
-          />
-          <label class="form-check-label" for="exampleRadio2"
-            >Street Views</label
-          >
-        </div>
-        <p class="form-title">Material Layers</p>
         <div class="mb-3 form-check">
           <input
             type="radio"
@@ -69,6 +68,17 @@
             id="l-none"
           />
           <label class="form-check-label" for="exampleRadio2">None</label>
+        </div>
+        <div class="mb-3 form-check">
+          <input
+            type="radio"
+            name="radios"
+            class="form-check-input"
+            id="l-age"
+          />
+          <label class="form-check-label" for="exampleRadio2"
+            >Buildings Age</label
+          >
         </div>
         <div class="mb-3 form-check">
           <input
@@ -126,7 +136,49 @@
         </div>
       </fieldset>
       <div id="legend"></div>
+      <div class="features-list">
+        <div id="type"><p></p></div>
+        <div id="age"><p></p></div>
+        <div id="simg"><p></p></div>
+      </div>
+      <div id="chart"></div>
     </div>
+
+    <div id="chart"></div>
+
+    <!-- <script>
+      var options = {
+        series: [44, 55, 67, 83],
+        chart: {
+          height: 350,
+          type: "radialBar",
+        },
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: "22px",
+              },
+              value: {
+                fontSize: "16px",
+              },
+              total: {
+                show: true,
+                label: "Total",
+                formatter: function (w) {
+                  // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                  return 249;
+                },
+              },
+            },
+          },
+        },
+        labels: ["Apples", "Oranges", "Bananas", "Berries"],
+      };
+
+      var chart = new ApexCharts(document.querySelector("#chart"), options);
+      chart.render();
+    </script> -->
 
     <div class="carousel-cont">
       <div id="myCarousel" class="carousel slide" data-ride="carousel">

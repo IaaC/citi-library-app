@@ -83,6 +83,9 @@
 
 .layer-list {
   position: absolute;
+  right: 40px;
+  height: 94%;
+  width: 20%;
   margin: 30px;
   padding: 40px 60px 40px 30px;
   background-color: #ffffffc1;
@@ -136,4 +139,8 @@
   font-family: Consolas, courier;
   fill: #000;
   font-size: 9pt;
+}
+
+#legend {
+  height: 80px;
 }
