@@ -30,7 +30,7 @@ map.on("load", () => {
       id: "Mchart",
       height: 290,
       type: "radar",
-  
+      foreColor: '#373d3f',
       toolbar: {
         show: false,
       },
@@ -45,18 +45,17 @@ map.on("load", () => {
       radar: {
         size: 90,
         polygons: {
-          strokeColors: "#9aeba3",
-          fill: {
-            colors: ["#f8f8f8", "#fff"],
-          },
+          strokeColors: "#45c4b0",
+          strokeWidth: 2,
         },
       },
     },
+    
     colors: ["#13678a"],
     markers: {
       size: 3,
-      colors: ["#13678a"],
-      strokeColor: "#012030",
+      colors: ["#9aeba3"],
+      strokeColor: "#9aeba3",
       strokeWidth: 2,
     },
     fill: {
@@ -194,8 +193,8 @@ map.on("load", () => {
     document.getElementById("age").innerHTML = "<p class='info-box'><b>Building Age</b></p>"+ e.features[0].properties.bld_age;
     document.getElementById("simg").innerHTML =
       "<img src=" + 
-      e.features[0].properties.documentLi +
-      " class='f-img' width='50px' ></img>";
+      e.features[0].properties.documentLi + 
+      " class='f-img' ></img>";
     var m_concrete = Math.round(e.features[0].properties.concrete * 100);
     //-----
     var m_brick = Math.round(e.features[0].properties.bricks * 100);
@@ -218,8 +217,6 @@ map.on("load", () => {
 
   hoveredStateId = null;
 });
-
-
 
 
 // Change the color of the buildings layer
@@ -332,4 +329,4 @@ const nav = new mapboxgl.NavigationControl({
   showZoom: true,
   showCompass: true,
 });
-map.addControl(nav, "top-right");
+map.addControl(nav, "top-left");

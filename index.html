@@ -61,7 +61,7 @@
   <body>
     <!-- MAPBOX
 ---------------------------------------------->
-    <button type="button" id="change" onclick="changeData()">Change data</button>
+    <div id="loader"></div> 
     <div id="map"></div>
 
     <!-- LAYERS
@@ -69,30 +69,91 @@
     <div class="layer-list">
       <p class="form-title">Map Layers</p>
       <div id="btn-DIV" class="btn-list">
-        <button id="l-none" class="layer-btn active">None</button>
-        <button id="l-age" class="layer-btn">Age</button>
-        <button id="l-concrete" class="layer-btn">Concrete</button>
-        <button id="l-brick" class="layer-btn">Brick</button>
-        <button id="l-stone" class="layer-btn">Stone</button>
-        <button id="l-glass" class="layer-btn">Glass</button>
-        <button id="l-metal" class="layer-btn">Metal</button>
-        <button id="l-wood" class="layer-btn">Wood</button>
+        <button id="l-none" class="layer-btn active" onclick="noneToggle()">None</button>
+        <button id="l-age" class="layer-btn" onclick="ageToggle()">Age</button>
+        <button id="l-concrete" class="layer-btn" onclick="concreteToggle()">Concrete</button>
+        <button id="l-brick" class="layer-btn" onclick="brickToggle()">Brick</button>
+        <button id="l-stone" class="layer-btn" onclick="stoneToggle()">Stone</button>
+        <button id="l-glass" class="layer-btn" onclick="glassToggle()">Glass</button>
+        <button id="l-metal" class="layer-btn" onclick="metalToggle()">Metal</button>
+        <button id="l-wood" class="layer-btn" onclick="woodToggle()">Wood</button>
       </div>
       <div class="features-list">
-        <div class="info-container">
-        <div id="type" class="info-box"></div>
+        <div class="info-container"> 
+        <div id="type" class="info-box"><p class="info-center">Building Info</p></div>
         <div id="age" class="info-box"></div>
       </div>
         <div class="img-container">
-          <div id="simg" class="f-img"></div>
+          <div id="simg" class="f-img">Street View</div>
       </div>
       </div>
       <div id="chart" class="f-chart"></div>
     </div>
 
+        <!-- LEGENDS
+---------------------------------------------->
+    <div id="legend">
+
+  <div id="age-legend" >
+    <div id="g-container">
+      <p class="g-label">2015</p>
+      <div id="g-age"></div>
+      <p class="g-label">1900</p>
+    </div>
+  </div>
+
+  <div id="concrete-legend">
+    <div id="g-container">
+      <p class="g-label">80%</p>
+      <div id="g-concrete"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+
+  <div id="brick-legend">
+    <div id="g-container">
+      <p class="g-label">80%</p>
+      <div id="g-brick"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+
+  <div id="stone-legend">
+    <div id="g-container">
+      <p class="g-label">30%</p>
+      <div id="g-stone"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+
+  <div id="glass-legend">
+    <div id="g-container">
+      <p class="g-label">40%</p>
+      <div id="g-glass"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+
+  <div id="metal-legend">
+    <div id="g-container">
+      <p class="g-label">15%</p>
+      <div id="g-metal"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+
+  <div id="wood-legend">
+    <div id="g-container">
+      <p class="g-label">25%</p>
+      <div id="g-wood"></div>
+      <p class="g-label">0%</p>
+    </div>
+  </div>
+</div>
 
 
-
+    <!-- CAROUSEL
+---------------------------------------------->
     <div class="carousel-cont">
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Wrapper for slides -->
@@ -281,8 +342,9 @@
         </div>
       </div>
     </div>
-  </body>
 
+    <div class="loader"></div>
+  </body>
   <script src="function.js"></script>
   <script src="visual.js"></script>
 </html>
