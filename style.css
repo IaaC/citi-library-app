@@ -5,6 +5,9 @@
   box-sizing: border-box;
 }
 
+.body{
+  overflow: hidden;
+}
 
 :root {
   --d-blue: #012030;
@@ -107,7 +110,11 @@
   border-radius: 10px;
   border-color: #04aa6d;
   border-width: 5px;
-  /* overflow: hidden */
+  overflow: hidden
+}
+
+#change{
+  position:absolute !important;
 }
 
 .form-check-label {
@@ -198,21 +205,30 @@
   overflow: hidden;
   border-style: none solid none solid;
   border-color: var(--l-blue); 
-  background-color: #4f4f4f17;
+  background-color: #7c7c7c17;
 }
 
 .info-container{
-  background-color: #4f4f4f17;
+  background-color: #7c7c7c17;
   height: 60px;
   padding: 0px;
   margin-bottom: 20px;
   margin-top: 20px;
   border-style: none solid none solid;
   border-color: var(--l-blue); 
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  
 }
 
 .info-box{
   margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  font-size: 14px;
+  color: var(--d-blue);
 }
 
 

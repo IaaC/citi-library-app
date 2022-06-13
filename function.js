@@ -22,7 +22,59 @@ map.on("load", () => {
   map.setLayoutProperty("bcn-age", "visibility", "none");
 });
 
+//initiating a fake chart on mapload
+//-------------------------------------------
+map.on("load", () => {
+  var options = {
+    chart: {
+      id: "Mchart",
+      height: 290,
+      type: "radar",
+  
+      toolbar: {
+        show: false,
+      },
+    },
+    series: [
+      {
+        name: "Percentage %",
+        data: [0, 0, 0, 0, 0, 0],
+      },
+    ],
+    plotOptions: {
+      radar: {
+        size: 90,
+        polygons: {
+          strokeColors: "#9aeba3",
+          fill: {
+            colors: ["#f8f8f8", "#fff"],
+          },
+        },
+      },
+    },
+    colors: ["#13678a"],
+    markers: {
+      size: 3,
+      colors: ["#13678a"],
+      strokeColor: "#012030",
+      strokeWidth: 2,
+    },
+    fill: {
+      opacity: 0.7,
+    },
+    xaxis: {
+      categories: ["Concrete", "Brick", "Stone", "Glass", "Metal", "Wood"],
+    },
+  };
+  
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
+  chart.render();
+  
+  });
+
+  
 // Add buildings shapes from geojson file
+// show buildings information onclick
 //-------------------------------------------
 map.on("load", () => {
   // Find the index of the first symbol layer in the map style.
@@ -127,9 +179,11 @@ map.on("load", () => {
   // show feature on click
   map.on("click", "b-id", (e) => {
 
-    document.getElementById("type").innerHTML = "<b> Building Typology : </b>"+
+
+
+    document.getElementById("type").innerHTML = "<p class='info-box'><b>Building Typology</b></p>"+
       e.features[0].properties.currentUse;
-    document.getElementById("age").innerHTML = "<b> Building Age : </b>"+ e.features[0].properties.bld_age;
+    document.getElementById("age").innerHTML = "<p class='info-box'><b>Building Age</b></p>"+ e.features[0].properties.bld_age;
     document.getElementById("simg").innerHTML =
       "<img src=" + 
       e.features[0].properties.documentLi +
@@ -147,57 +201,24 @@ map.on("load", () => {
     var m_wood = Math.round(e.features[0].properties.wood * 100);
     //-----
 
-    var options = {
-      id: "Mchart",
-      series: [
+      ApexCharts.exec('Mchart', "updateSeries", [
         {
-          name: "Materials",
           data: [m_concrete, m_brick, m_stone, m_glass, m_metal, m_wood],
-        },
-      ],
-      chart: {
-        height: 290,
-        type: "radar",
-        toolbar: {
-          show: false,
-        },
-      },
-      plotOptions: {
-        radar: {
-          size: 90,
-          polygons: {
-            strokeColors: "#9aeba3",
-            fill: {
-              colors: ["#f8f8f8", "#fff"],
-            },
-          },
-        },
-      },
-      colors: ["#13678a"],
-      markers: {
-        size: 3,
-        colors: ["#13678a"],
-        strokeColor: "#012030",
-        strokeWidth: 2,
-      },
-      fill: {
-        opacity: 0.7,
-      },
-      xaxis: {
-        categories: ["Concrete", "Brick", "Stone", "Glass", "Metal", "Wood"],
-      },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+        }
+      ]);
   });
 
   hoveredStateId = null;
 });
 
+
+
+
 // Change the color of the buildings layer
 //https://docs.mapbox.com/mapbox-gl-js/example/color-switcher/
 //-------------------------------------------
+
+map.on("load", () => {
 document.getElementById("l-none").addEventListener("click", () => {
   map.setPaintProperty("b-id", "fill-extrusion-color", [
     "case",
@@ -292,6 +313,9 @@ document.getElementById("l-wood").addEventListener("click", () => {
     "#a15f00",
   ]);
 });
+});
+
+
 // Mapbox Controls
 //-------------------------------------------
 
