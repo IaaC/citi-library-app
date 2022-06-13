@@ -126,13 +126,14 @@ map.on("load", () => {
 
   // show feature on click
   map.on("click", "b-id", (e) => {
-    document.getElementById("type").innerHTML =
+
+    document.getElementById("type").innerHTML = "<b> Building Typology : </b>"+
       e.features[0].properties.currentUse;
-    document.getElementById("age").innerHTML = e.features[0].properties.bld_age;
+    document.getElementById("age").innerHTML = "<b> Building Age : </b>"+ e.features[0].properties.bld_age;
     document.getElementById("simg").innerHTML =
-      "<img src=" +
+      "<img src=" + 
       e.features[0].properties.documentLi +
-      " class='pop-img'></img>";
+      " class='f-img' ></img>";
     var m_concrete = Math.round(e.features[0].properties.concrete * 100);
     //-----
     var m_brick = Math.round(e.features[0].properties.bricks * 100);

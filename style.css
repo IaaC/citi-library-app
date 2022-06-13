@@ -5,6 +5,7 @@
   box-sizing: border-box;
 }
 
+
 :root {
   --d-blue: #012030;
   --l-blue: #13678a;
@@ -106,6 +107,7 @@
   border-radius: 10px;
   border-color: #04aa6d;
   border-width: 5px;
+  /* overflow: hidden */
 }
 
 .form-check-label {
@@ -123,7 +125,6 @@
   /* font-family: monospace; */
   font-size: 20px;
   margin-bottom: 10px;
-  margin-top: 20px;
   padding-left: 10px !important;
   padding-right: 50px !important;
   width: 100%;
@@ -162,7 +163,7 @@
 .btn-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 1px;
 }
 
 .layer-btn {
@@ -185,11 +186,35 @@
 }
 
 .f-img {
-  width: 90%;
+  width: 100%;
   margin: auto;
-  opacity: 60%;
-  margin-top: 20px;
+  opacity: 90%;
 }
+
+
+.img-container{
+  /* background-color: var(--l-green); */
+  height: 225px;
+  overflow: hidden;
+  border-style: none solid none solid;
+  border-color: var(--l-blue); 
+  background-color: #4f4f4f17;
+}
+
+.info-container{
+  background-color: #4f4f4f17;
+  height: 60px;
+  padding: 0px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border-style: none solid none solid;
+  border-color: var(--l-blue); 
+}
+
+.info-box{
+  margin: 0 !important;
+}
+
 
 .f-chart {
   background: none !important;
