@@ -11,16 +11,16 @@ const map = new mapboxgl.Map({
 
 // Hide embedded layers from a style
 //-------------------------------------------
-map.on("load", () => {
-  map.setLayoutProperty("bcn-buildings", "visibility", "none");
-  map.setLayoutProperty("bcn-stone", "visibility", "none");
-  map.setLayoutProperty("bcn-wood", "visibility", "none");
-  map.setLayoutProperty("bcn-metal", "visibility", "none");
-  map.setLayoutProperty("bcn-brick", "visibility", "none");
-  map.setLayoutProperty("bcn-concrete", "visibility", "none");
-  map.setLayoutProperty("bcn-glass", "visibility", "none");
-  map.setLayoutProperty("bcn-age", "visibility", "none");
-});
+// map.on("load", () => {
+//   map.setLayoutProperty("bcn-buildings", "visibility", "none");
+//   map.setLayoutProperty("bcn-stone", "visibility", "none");
+//   map.setLayoutProperty("bcn-wood", "visibility", "none");
+//   map.setLayoutProperty("bcn-metal", "visibility", "none");
+//   map.setLayoutProperty("bcn-brick", "visibility", "none");
+//   map.setLayoutProperty("bcn-concrete", "visibility", "none");
+//   map.setLayoutProperty("bcn-glass", "visibility", "none");
+//   map.setLayoutProperty("bcn-age", "visibility", "none");
+// });
 
 //initiating a fake chart on mapload
 //-------------------------------------------
