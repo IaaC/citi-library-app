@@ -64,7 +64,15 @@ map.on("load", () => {
     },
     xaxis: {
       categories: ["Concrete", "Brick", "Stone", "Glass", "Metal", "Wood"],
+
     },
+
+    yaxis:{
+      min: 0,
+      max: 80,
+      tickAmount: 4,
+
+    }
   };
   
   var chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -187,7 +195,7 @@ map.on("load", () => {
     document.getElementById("simg").innerHTML =
       "<img src=" + 
       e.features[0].properties.documentLi +
-      " class='f-img' ></img>";
+      " class='f-img' width='50px' ></img>";
     var m_concrete = Math.round(e.features[0].properties.concrete * 100);
     //-----
     var m_brick = Math.round(e.features[0].properties.bricks * 100);
