@@ -296,7 +296,7 @@
   width: 30px;
   height: 100%;
   background-color: #186a71; /* For browsers that do not support gradients */
-  background-image: linear-gradient(0deg, #8fc6ce, #186a71);
+  background-image: linear-gradient(0deg, #044348, #c7e9ee);
   box-shadow: 5px 0px rgb(250, 250, 250); 
 }
 
@@ -358,3 +358,23 @@
   margin: auto;
   background-color: #000;
 }
+
+
+.boxdraw {
+  background: rgba(56, 135, 190, 0.1);
+  border: 2px solid #3887be;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  }
+
+  .faction {
+    position: absolute;
+    right: 450px;
+    top: 30px;
+    width: 100px;
+    height: 100px;
+    background-color: #04aa6d;
+  }

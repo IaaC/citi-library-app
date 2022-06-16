@@ -9,18 +9,9 @@ const map = new mapboxgl.Map({
   // bearing: -45,
 });
 
-// Hide embedded layers from a style
-//-------------------------------------------
-// map.on("load", () => {
-//   map.setLayoutProperty("bcn-buildings", "visibility", "none");
-//   map.setLayoutProperty("bcn-stone", "visibility", "none");
-//   map.setLayoutProperty("bcn-wood", "visibility", "none");
-//   map.setLayoutProperty("bcn-metal", "visibility", "none");
-//   map.setLayoutProperty("bcn-brick", "visibility", "none");
-//   map.setLayoutProperty("bcn-concrete", "visibility", "none");
-//   map.setLayoutProperty("bcn-glass", "visibility", "none");
-//   map.setLayoutProperty("bcn-age", "visibility", "none");
-// });
+// Disable default box zooming.
+map.boxZoom.disable();
+
 
 //initiating a fake chart on mapload
 //-------------------------------------------
@@ -126,6 +117,7 @@ map.on("load", () => {
         "fill-extrusion-height": ["get", "height"],
         "fill-extrusion-opacity": 0.85,
       },
+      
     },
     firstSymbolId
   );
@@ -216,7 +208,159 @@ map.on("load", () => {
   });
 
   hoveredStateId = null;
+
+// Change to region selection based on click
+  document.getElementById("regionfilter").addEventListener("click", () => {
+
+    window.alert('Hold Shift and drag the map to query features for multiple buildings')
+    map.setPaintProperty("b-id", "fill-extrusion-color","#525d70");
+    // map.setLayoutProperty("b-id", "visibility", "none");
+    const canvas = map.getCanvasContainer();
+     
+    // Variable to hold the starting xy coordinates
+    // when `mousedown` occured.
+    let start;
+     
+    // Variable to hold the current xy coordinates
+    // when `mousemove` or `mouseup` occurs.
+    let current;
+     
+    // Variable for the draw box element.
+    let box;
+     
+    map.addSource("BCNbuildings", {
+      type: "geojson",
+      data: "library/geodata/BCN_B_M_2.geojson",
+      generateId: true,
+    });
+     
+     
+    map.addLayer(
+    {
+    'id': '2dBuildings-highlighted',
+    'type': 'fill',
+    'source': 'combined',
+    'paint': {
+    'fill-color': '#96d96a',
+    // 'fill-opacity': 0.75
+    },
+    'filter': ['in', 'id', '']
+    },
+    ); // Place polygon under these labels.
+     
+    // Set `true` to dispatch the event before other functions
+    // call it. This is necessary for disabling the default map
+    // dragging behaviour.
+    canvas.addEventListener('mousedown', mouseDown, true);
+     
+    // Return the xy coordinates of the mouse position
+    function mousePos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return new mapboxgl.Point(
+    e.clientX - rect.left - canvas.clientLeft,
+    e.clientY - rect.top - canvas.clientTop
+    );
+    }
+     
+    function mouseDown(e) {
+    // Continue the rest of the function if the shiftkey is pressed.
+    if (!(e.shiftKey && e.button === 0)) return;
+     
+    // Disable default drag zooming when the shift key is held down.
+    map.dragPan.disable();
+     
+    // Call functions for the following events
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('keydown', onKeyDown);
+     
+    // Capture the first xy coordinates
+    start = mousePos(e);
+    }
+     
+    function onMouseMove(e) {
+    // Capture the ongoing xy coordinates
+    current = mousePos(e);
+     
+    // Append the box element if it doesnt exist
+    if (!box) {
+    box = document.createElement('div');
+    box.classList.add('boxdraw');
+    canvas.appendChild(box);
+    }
+     
+    const minX = Math.min(start.x, current.x),
+    maxX = Math.max(start.x, current.x),
+    minY = Math.min(start.y, current.y),
+    maxY = Math.max(start.y, current.y);
+     
+    // Adjust width and xy position of the box element ongoing
+    const pos = `translate(${minX}px, ${minY}px)`;
+    box.style.transform = pos;
+    box.style.width = maxX - minX + 'px';
+    box.style.height = maxY - minY + 'px';
+    }
+     
+    function onMouseUp(e) {
+    // Capture xy coordinates
+    finish([start, mousePos(e)]);
+    }
+     
+    function onKeyDown(e) {
+    // If the ESC key is pressed
+    if (e.keyCode === 27) finish();
+    }
+     
+    function finish(bbox) {
+    // Remove these events now that finish has been called.
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('keydown', onKeyDown);
+    document.removeEventListener('mouseup', onMouseUp);
+     
+    if (box) {
+    box.parentNode.removeChild(box);
+    box = null;
+    }
+     
+    // If bbox exists. use this value as the argument for `queryRenderedFeatures`
+    if (bbox) {
+    const features = map.queryRenderedFeatures(bbox, {
+    layers: ['b-id']
+    });
+     
+    if (features.length >= 5000) {
+    return window.alert('Select a smaller number of features');
+    }
+     
+    // Run through the selected features and set a filter
+    // to match features with unique FIPS codes to activate
+    // the `counties-highlighted` layer.
+    const fips = features.map((feature) => feature.properties.id);
+    console.log(fips) 
+    map.setFilter('2dBuildings-highlighted', ['in', 'id', ...fips]);
+    }
+    
+    map.dragPan.enable();
+    }
+     
+    map.on('mousemove', (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+    layers: ['2dBuildings-highlighted']
+    });
+    
+    
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+     
+  
+    });
+    });
 });
+
+
+
+
+
 
 
 // Change the color of the buildings layer
@@ -239,11 +383,11 @@ document.getElementById("l-age").addEventListener("click", () => {
     ["linear"],
     ["get", "bld_age"],
     1900,
-    "#8fc6ce",
-    1970,
-    "#238f99",
+    "#044348",
+    1930,
+    "#8dc0c5",
     2015,
-    "#186a71",
+    "#e1f7fa",
   ]);
 });
 
@@ -319,6 +463,17 @@ document.getElementById("l-wood").addEventListener("click", () => {
   ]);
 });
 });
+
+
+// Create a draggable point
+//https://docs.mapbox.com/mapbox-gl-js/example/drag-a-point/
+//-------------------------------------------
+
+
+
+
+
+
 
 
 // Mapbox Controls
