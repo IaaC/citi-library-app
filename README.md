@@ -24,10 +24,10 @@ Built using HTML, and styled with CSS, the frontend will host the interactive Ma
 ![01_diagram](assets/ReadmeImages/01_diagram.jpg)
 Workflow Diagram
 
-![02_Interface](assets/ReadmeImages/02_diagram.jpg)
+![02_Interface](assets/ReadmeImages/02_Interface.jpg)
 The mapbox frontend interactive interface
 
-![03_Interface](assets/ReadmeImages/03_diagram.jpg)
+![03_Interface](assets/ReadmeImages/03_Interface.jpg)
 Partial static layer display
 
 #### Back End
