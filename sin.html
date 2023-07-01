@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CITY LIBRARY</title>
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://kit.fontawesome.com/0982dc1eb5.js" crossorigin="anonymous"></script>
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <!-- Mapbox -->
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
+    <script src="https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js"></script>
+
+    <script>
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        );
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        );
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        );
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mnjs/browser/index.js"></script>
+    <script>
+      // Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+      // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+      var _seed = 42;
+      Math.random = function () {
+        _seed = (_seed * 16807) % 2147483647;
+        return (_seed - 1) / 2147483646;
+      };
+    </script>
+
+    <!-- CSS file -->
+    <link rel="stylesheet" href="style.css" />
+    <link href="../../assets/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- MAPBOX
+---------------------------------------------->
+    <div id="loader"></div>
+    <div id="map"></div>
+<!-- 
+    <button id="regionfilter" class="faction" onclick="noneToggle()">
+      region (testing)
+    </button>
+    <button id="mapfilter" class="mapaction" onclick="noneToggle()">
+      map (testing)
+    </button> -->
+    <!-- LAYERS
+---------------------------------------------->
+<div class="sidetab">
+<div class="tab">
+  <button class="tablinks" onclick="window.location.href= 'index.html';" ><i class="fa-solid fa-house fa-lg"></i></button>
+  <button class="tablinks" onclick="openCity(event, 'Maptab'), noneToggle()" id="mapfilter" id="defaultOpen" >Map</button>
+  <button class="tablinks" onclick="openCity(event, 'Regiontab'), noneToggle()" id="regionfilter">Region</button>
+  <button class="tablinks" onclick="openCity(event, 'Buildingtab'), noneToggle()" id="buildingfilter">Building</button>
+</div>
+<!-- 01-MAP TAB
+---------------------------------------------->
+<div id="Hometab" class="tabcontent">
+  <span onclick="this.parentElement.style.display='none'" class="topright" id="defaultOpen">&times</span>
+  <div class="layer-list">
+    <p class="proj-title">City Library Project </p>
+    <p class="proj-info">City library is a digital interface developed by using computer vision and machine learning algorithms. 
+      This tool aims to detect waste materials in cities from building construction, treating buildings as material banks and urban environment as “mines”. 
+      The term “Urban mining” is used to describe the process of recovering and reusing a city’s materials, which is the focus of this tool.
+    </p>
+      <p class="listTitle">Material Recognition Framework</p>
+      <ul class="procList">
+        <li class="list">- Dataset generation using geodata and GSVs</li>
+        <li class="list">- GAN model training and deploying</li>
+        <li class="list">- Query single image per building</li>
+        <li class="list">- Applying material recognition model</li>
+        <li class="list">- Material percentage analysis</li>
+        <li class="list">- Concrete-Bricks-Stone-Glass-Wood-Metal %</li>
+        <li class="list">- GeodataFrame for both buildings and materials</li>
+      </ul>
+      <div class="carousel-cont">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            
+            <div class="item">
+              <img src="library/home/geodata.jpg" class="c-img" alt="geodata" />
+              <p class="carCaption">Query geodata features - Street view image locations </p>
+            </div>
+
+            <div class="item active">
+              <img src="library/home/predictions.jpg" class="c-img" alt="predictions" />
+              <p class="carCaption">Street views material recognition</p>
+            </div>
+  
+            <div class="item">
+              <img src="library/home/predictions-2.jpg" class="c-img" alt="predictions" />
+              <p class="carCaption">Computer vision model material recognition</p>
+            </div>
+  
+            <div class="item">
+              <img src="library/home/graph.jpg" class="c-img" alt="graph" />
+              <p class="carCaption">Computer vision model training graphs </p>
+            </div>
+
+            <div class="item">
+              <img src="library/home/software.jpg" class="c-img" alt="software" />
+              <p class="carCaption">Grasshopper and Rhino3D Interoperability </p>
+            </div>
+
+            <div class="item">
+              <img src="library/home/building.jpg" class="c-img" alt="building" />
+              <p class="carCaption">Single feature filtering </p>
+            </div>
+
+            <div class="item">
+              <img src="library/home/region.jpg" class="c-img" alt="region" />
+              <p class="carCaption">Region features filtering </p>
+            </div>
+
+            <div class="item">
+              <img src="library/home/map.jpg" class="c-img" alt="map" />
+              <p class="carCaption">Map features filtering </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <img src="library/home/iaac.png" alt="" class="iaLogo">
+  </div>
+</div>
+
+<!-- 01-MAP TAB
+---------------------------------------------->
+<div id="Maptab" class="tabcontent">
+  <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+  <div class="layer-list">
+    <p class="user-hint"><b>Turn on/off </b>layers using the map layers tab</p>
+    <p class="form-title">Map Layers</p>
+    <div id="btn-DIV" class="btn-list">
+      <button id="l-none" class="layer-btn" onclick="noneToggle()">
+        None
+      </button>
+      <button id="l-age" class="layer-btn" onclick="ageToggle()">Age</button>
+      <button id="l-concrete" class="layer-btn" onclick="concreteToggle()">
+        Concrete
+      </button>
+      <button id="l-brick" class="layer-btn" onclick="brickToggle()">
+        Brick
+      </button>
+      <button id="l-stone" class="layer-btn" onclick="stoneToggle()">
+        Stone
+      </button>
+      <button id="l-glass" class="layer-btn" onclick="glassToggle()">
+        Glass
+      </button>
+      <button id="l-metal" class="layer-btn" onclick="metalToggle()">
+        Metal
+      </button>
+      <button id="l-wood" class="layer-btn" onclick="woodToggle()">
+        Wood
+      </button>
+    </div>
+    <!-- <div id="chart" class="f-chart"></div> -->
+  </div>
+  <p class="form-title">Average Material Percentages</p>
+  <div class="features-list">
+    <div class="info-container">
+      <div id="Bcount" class="info-box">
+        <p class="info-center">Building Info</p>
+      </div>
+    </div>
+  </div>
+  <div id="mapchart" class="f-chart"></div>
+</div>
+<!-- 02-REGION TAB
+---------------------------------------------->
+<div id="Regiontab" class="tabcontent">
+  <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+  <div class="layer-list">
+    <p class="user-hint"><b>Hold Shift + Drag </b>to query multiple buildings</p>
+    <p class="form-title">Average Material Percentages</p>
+    <div class="features-list">
+      <div class="info-container">
+        <div id="BRcount" class="info-box">
+          <p class="info-center">Building Info</p>
+        </div>
+      </div>
+    </div>
+    <div id="Regionchart" class="f-chart"></div>
+    <!-- <div id="chart" class="f-chart"></div> -->
+  </div>
+</div>
+<!-- 03-BUILDING TAB
+---------------------------------------------->
+<div id="Buildingtab" class="tabcontent">
+  <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+  <div class="layer-list">
+    <p class="user-hint"><b>Left click</b> on a building to query single feature</p>
+    <p class="form-title">Typology / Street View Image</p>
+    <div class="features-list">
+      <div class="info-container">
+        <div id="type" class="info-box">
+          <p class="info-center">Building Info</p>
+        </div>
+        <div id="age" class="info-box"></div>
+      </div>
+      <div class="img-container">
+        <div id="simg" class="f-img">Street View</div>
+      </div>
+    </div>
+    <p class="form-title">Material Percentages Chart</p>
+    <div id="chart" class="f-chart"></div>
+  </div>
+</div>
+</div>
+
+    <!-- LEGENDS
+---------------------------------------------->
+    <div id="legend">
+      <div id="age-legend">
+        <div id="g-container">
+          <p class="g-label">2015</p>
+          <div id="g-age"></div>
+          <p class="g-label">1900</p>
+        </div>
+      </div>
+
+      <div id="concrete-legend">
+        <div id="g-container">
+          <p class="g-label">80%</p>
+          <div id="g-concrete"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+
+      <div id="brick-legend">
+        <div id="g-container">
+          <p class="g-label">80%</p>
+          <div id="g-brick"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+
+      <div id="stone-legend">
+        <div id="g-container">
+          <p class="g-label">30%</p>
+          <div id="g-stone"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+
+      <div id="glass-legend">
+        <div id="g-container">
+          <p class="g-label">40%</p>
+          <div id="g-glass"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+
+      <div id="metal-legend">
+        <div id="g-container">
+          <p class="g-label">15%</p>
+          <div id="g-metal"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+
+      <div id="wood-legend">
+        <div id="g-container">
+          <p class="g-label">25%</p>
+          <div id="g-wood"></div>
+          <p class="g-label">0%</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="loader"></div>
+    <script src="node_modules/jquery-csv/src/jquery.csv.js"></script>
+    <script src="sin.js"></script>
+    <script src="visual.js"></script>
+  </body>
+</html>
